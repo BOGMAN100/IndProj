@@ -53,6 +53,7 @@ def callback_query(call):
     if req[0] == 'unseen':
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
+
     elif any([req[0] == x for x in cor]):
         sub = req[0]  # название предмета для вывода
         vector = 'OGE\\' + req[0] + '\\'  # в папке с каким предметом искать
