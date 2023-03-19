@@ -61,12 +61,15 @@ def callback_query(call):
     elif any([req[0] == x for x in ['demo', 'spec', 'kodif']]):
         fil = req[0]  # тип документа для вывода
         bot.delete_message(call.message.chat.id, call.message.message_id)
-        bot.send_message(call.message.chat.id, file_name[fil] + " по " + sub_name[sub] + " загружается...")
+        message = bot.send_message(call.message.chat.id, file_name[fil] + " по " + sub_name[sub] + " загружается...")
+        # bot.send_message(call.message.chat.id, file_name[fil] + " по " + sub_name[sub] + " загружается...")
         path = vector + req[0] + ".pdf"
         path = path.replace("\\", "/")  # замена для правильной работы с докером
         bot.send_document(call.message.chat.id, open(path, 'rb'))
         page = 1
         stn = 0
+        bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id,
+                              text=file_name[fil] + " по " + sub_name[sub] + " загружен.")
         start(call)
 
     # Обработка кнопки - вперед
