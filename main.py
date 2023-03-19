@@ -22,6 +22,10 @@ sub_data = [InlineKeyboardButton(text='Математика', callback_data='mat
             InlineKeyboardButton(text='Химия', callback_data='him'),
             InlineKeyboardButton(text='Английский', callback_data='eng'),
             InlineKeyboardButton(text='Немецкий', callback_data='nem')]
+sub_name = {'math': "математике", 'rus': "русскому", 'phys': "физике", 'geo': "географии", 'his': "истории",
+            'bio': "биологии", 'lit': "литературе", 'inf': "информатике", 'ob': "обществознанию",
+            'him': "химии", 'eng': "английскому", 'nem': "немецкому"}
+file_name = {"kodif": "Кодификатор", "spec": "Сппецификатор", "demo": "Демоверсия"}
 cor = ('math', 'rus', 'phys', 'geo', 'his', 'bio', 'lit', 'inf', 'ob', 'him', 'eng', 'nem')
 vector = ''
 
@@ -43,11 +47,14 @@ def callback_query(call):
     global page
     global vector
     global stn
+    global sub
+    global fil
     # Обработка кнопки - скрыть
     if req[0] == 'unseen':
         bot.delete_message(call.message.chat.id, call.message.message_id)
 
     elif any([req[0] == x for x in cor]):
+        sub = req[0]  # название предмета для вывода
         vector = 'OGE\\' + req[0] + '\\'  # в папке с каким предметом искать
         markup = InlineKeyboardMarkup()
         markup.add(InlineKeyboardButton(text="Демоверсия", callback_data='demo'),
@@ -58,8 +65,9 @@ def callback_query(call):
                               chat_id=call.message.chat.id,
                               message_id=call.message.message_id)
     elif any([req[0] == x for x in ['demo', 'spec', 'kodif']]):
+        fil = req[0]  # тип документа для вывода
         bot.delete_message(call.message.chat.id, call.message.message_id)
-        bot.send_message(call.message.chat.id, "Документ загружается...")
+        bot.send_message(call.message.chat.id, file_name[fil] + " по " + sub_name[sub] + " загружается...")
         path = vector + req[0] + ".pdf"
         path = path.replace("\\", "/")  # замена для правильной работы с докером
         bot.send_document(call.message.chat.id, open(path, 'rb'))
@@ -114,7 +122,8 @@ def start(m):
                InlineKeyboardButton(text=f'Вперёд --->', callback_data=f'next-page')
                )
     if stn == 1:
-        bot.send_message(m.from_user.id, "Привет!\nПо какому предмету нужен материал?", reply_markup=markup) # не знаю почему наоборот, но да
+        bot.send_message(m.from_user.id, "Привет!\nПо какому предмету нужен материал?",
+                         reply_markup=markup)  # не знаю почему наоборот, но да
         stn = 0
     elif stn == 0:
         bot.send_message(m.from_user.id, "Готово!\nЧто-нибудь ещё?", reply_markup=markup)
