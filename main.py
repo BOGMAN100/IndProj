@@ -30,15 +30,6 @@ cor = ('math', 'rus', 'phys', 'geo', 'his', 'bio', 'lit', 'inf', 'ob', 'him', 'e
 vector = ''
 
 
-# def reset_stn(func):
-#     def wrapper(*args, **kwargs):
-#         global stn
-#         stn = 0
-#         return func(*args, **kwargs)
-#
-#     return wrapper
-#
-
 # обработка действий кнопок
 @bot.callback_query_handler(func=lambda call: True)
 def callback_query(call):
@@ -52,6 +43,7 @@ def callback_query(call):
     # Обработка кнопки - скрыть
     if req[0] == 'unseen':
         bot.delete_message(call.message.chat.id, call.message.message_id)
+        page = 1
 
 
     elif any([req[0] == x for x in cor]):
@@ -62,6 +54,7 @@ def callback_query(call):
                    InlineKeyboardButton(text="Спецификатор", callback_data="spec"),
                    InlineKeyboardButton(text="Кодификатор", callback_data="kodif"))
         markup.add(InlineKeyboardButton(text='Скрыть', callback_data='unseen'))
+        markup.add(InlineKeyboardButton(text=f'Назад', callback_data=f'back-page'))
         bot.edit_message_text(f'Выбери тип документа: ', reply_markup=markup,
                               chat_id=call.message.chat.id,
                               message_id=call.message.message_id)
@@ -92,20 +85,27 @@ def callback_query(call):
                                   chat_id=call.message.chat.id,
                                   message_id=call.message.message_id)
 
+
     # Обработка кнопки - назад
     elif req[0] == 'back-page':
+        if page == 1:
+            page += 1
         if page > 1:
-            page = page - 1
-            markup = InlineKeyboardMarkup()
-            markup.add(sub_data[(1 + page * 4 - 4) - 1], sub_data[(1 + page * 4 - 4)])
-            markup.add(sub_data[(1 + page * 4 - 4) + 1], sub_data[(1 + page * 4 - 4) + 2])
-            markup.add(InlineKeyboardButton(text='Скрыть', callback_data='unseen'))
-            markup.add(InlineKeyboardButton(text=f'<--- Назад', callback_data=f'back-page'),
-                       InlineKeyboardButton(text=f'{page}/{count}', callback_data=f' '),
-                       InlineKeyboardButton(text=f'Вперёд --->', callback_data=f'next-page'))
-            bot.edit_message_text(f'По какому предмету нужен материал?', reply_markup=markup,
-                                  chat_id=call.message.chat.id,
-                                  message_id=call.message.message_id)
+            try:
+                page = page - 1
+                markup = InlineKeyboardMarkup()
+                markup.add(sub_data[(1 + page * 4 - 4) - 1], sub_data[(1 + page * 4 - 4)])
+                markup.add(sub_data[(1 + page * 4 - 4) + 1], sub_data[(1 + page * 4 - 4) + 2])
+                markup.add(InlineKeyboardButton(text='Скрыть', callback_data='unseen'))
+                markup.add(InlineKeyboardButton(text=f'<--- Назад', callback_data=f'back-page'),
+                           InlineKeyboardButton(text=f'{page}/{count}', callback_data=f' '),
+                           InlineKeyboardButton(text=f'Вперёд --->', callback_data=f'next-page'))
+                bot.edit_message_text(f'По какому предмету нужен материал?', reply_markup=markup,
+                                      chat_id=call.message.chat.id,
+                                      message_id=call.message.message_id)
+            # убирает ошибку *сообщение не было изменено* ( в идеале перехватывать только ее )
+            except:
+                pass
 
 
 # Обработчик входящих сообщений
