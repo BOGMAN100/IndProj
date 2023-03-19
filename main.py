@@ -25,7 +25,7 @@ sub_data = [InlineKeyboardButton(text='Математика', callback_data='mat
 sub_name = {'math': "математике", 'rus': "русскому", 'phys': "физике", 'geo': "географии", 'his': "истории",
             'bio': "биологии", 'lit': "литературе", 'inf': "информатике", 'ob': "обществознанию",
             'him': "химии", 'eng': "английскому", 'nem': "немецкому"}
-file_name = {"kodif": "Кодификатор", "spec": "Сппецификатор", "demo": "Демоверсия"}
+file_name = {"kodif": "Кодификатор", "spec": "Спецификатор", "demo": "Демоверсия"}
 cor = ('math', 'rus', 'phys', 'geo', 'his', 'bio', 'lit', 'inf', 'ob', 'him', 'eng', 'nem')
 vector = ''
 
