@@ -52,7 +52,7 @@ def callback_query(call):
         bot.delete_message(call.message.chat.id, call.message.message_id)
         bot.send_message(call.message.chat.id, "Документ загружается...")
         path = vector + req[0] + ".pdf"
-        path = path.replace("\\", "/")
+       # path = path.replace("\\", "/")   # строка для правильной работы с докером
         bot.send_document(call.message.chat.id, open(path, 'rb'))
 
     # Обработка кнопки - вперед
