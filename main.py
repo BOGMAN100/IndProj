@@ -100,7 +100,7 @@ def callback_query(call):
         page = 1
         stn = 0
         bot.edit_message_text(chat_id=message.chat.id, message_id=message.message_id,
-                              text=file_name[fil] + " по " + sub_name[sub] + ".")
+                              text=file_name[fil] + " " + exam_name + " по " + sub_name[sub] + ".")
         start(call)
 
     # Обработка кнопки - вперед
