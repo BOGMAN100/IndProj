@@ -9,6 +9,7 @@ WORKDIR /appp
 # Копирование файлов приложения в контейнер
 COPY main.py ./
 COPY OGE/ ./OGE/
+COPY EGE/ ./EGE/
 COPY .env ./
 
 # Установка зависимостей
